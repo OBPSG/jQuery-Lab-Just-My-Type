@@ -40,3 +40,7 @@
 .glyphicon-remove {
   color : #CD2626
 }
+
+.key-highlight{
+  border-color: blue;
+}

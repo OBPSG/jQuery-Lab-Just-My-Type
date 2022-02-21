@@ -9,11 +9,22 @@ $(function () {
             $lowerCaseKeyboard.hide();
             $upperCaseKeyboard.show();
         }
+        else {
+            let keyID = event.key.charCodeAt(0);
+            let $keyPressed = $("#" + keyID);
+            $keyPressed.addClass("key-highlight");
+        }
+
     });
     $(document).on("keyup", function (event) {
         if (event.key === "Shift") {
             $lowerCaseKeyboard.show();
             $upperCaseKeyboard.hide();
+        } else {
+            let keyID = event.key.charCodeAt(0);
+            let $keyPressed = $("#" + keyID);
+            $keyPressed.removeClass("key-highlight");
         }
+
     });
 });

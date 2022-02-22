@@ -41,6 +41,10 @@
   color : #CD2626
 }
 
+.highlight{
+  background-color: yellow;
+}
+
 .key-highlight{
   border-color: blue;
 }

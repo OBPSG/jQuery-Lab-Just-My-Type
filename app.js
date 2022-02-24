@@ -37,8 +37,7 @@ $(function () {
             $upperCaseKeyboard.show();
         } else {
             //If this is the first key that's been typed, begin the timer
-            if(!hasBegun)
-            {
+            if (!hasBegun) {
                 hasBegun = true;
                 timeStart = Date.now();
             }
@@ -50,12 +49,10 @@ $(function () {
 
             if (sentencePosition < sentence.length) {
                 //Check if the input character is equal to the expected one, and update the feedback accordingly
-                if(event.key == expectedChar)
-                {
+                if (event.key == expectedChar) {
                     $feedbackLine.append(check);
                 }
-                else
-                {
+                else {
                     $feedbackLine.append(X);
                     errorCount += 1;
                 }
@@ -71,6 +68,10 @@ $(function () {
             //We've reached the end of the current sentence, so display the next one, or if that was the last sentence, end the test.
             else {
                 if (sentencesIndex < sentenceArr.length - 1) {
+                    //Check if correct key was entered
+                    if (event.key != expectedChar) {
+                        errorCount += 1;
+                    }
                     sentencesIndex += 1;
                     sentence = sentenceArr[sentencesIndex];
                     sentencePosition = 0;
@@ -84,8 +85,8 @@ $(function () {
                     //console.log($highlightSpan);
                     $prompt.append(sentence.substring(0, sentencePosition), $highlightSpan, sentence.substring(sentencePosition + 1, sentence.length));
                 }
-                else{
-                    //Finalizie the test
+                else {
+                    //Finalize the test
                     timeEnd = Date.now();
                     //Disable keyboard input by removing the event listeners for keydown and keyup
                     $(document).off("keydown");
@@ -100,7 +101,7 @@ $(function () {
                     //Display the Results
                     const NUM_WORDS = 54;
                     $prompt.text = "Results:"
-                    
+
                     let elapsedTimeMinutes = Math.floor(elapsedTimeSeconds / 60);
                     let timeSeconds = elapsedTimeSeconds % 60;
 
@@ -109,11 +110,28 @@ $(function () {
                     $feedbackLine.append("Time: " + elapsedTimeMinutes + "m, " + timeSeconds + "s  |  ");
                     $feedbackLine.append("Mistakes: " + errorCount + "  |  ");
                     $feedbackLine.append("Words Per Minute: " + wordsPerMinute);
+
+                    //Display a dialog asking if the user wants to do the test again
+                    let $dialog = $("<div></div>");
+                    $dialog.addClass(["row", "col-lg-12", "text-center"]);
+                    $dialog.append("Would you like to try again?");
+                    let $yesBtn = $("<button>Yes</button>");
+                    $yesBtn.css("margin", "10px");
+                    let $noBtn = $("<button>No</button>");
+                    $noBtn.css("margin", "10px");
+                    $("#prompt-container").append($dialog);
+                    $dialog.append($yesBtn);
+                    $dialog.append($noBtn);
+
+                    //Add event listner to refresh the page when the "yes" button is clicked
+                    $yesBtn.on("click", function () {
+                        location.reload(true);
+                    });
                 }
             }
         }
     });
-    
+
     $(document).on("keyup", function (event) {
         if (event.key === "Shift") {
             $lowerCaseKeyboard.show();
@@ -125,5 +143,4 @@ $(function () {
             $keyPressed.removeClass("key-highlight");
         }
     });
-
 });
